@@ -31,11 +31,14 @@ export async function GET(request) {
       }
     ]);
   }
-  if (action === null || action === undefined || action === "all") {
-    return NextResponse.json({error: "Can not run this action!"});
-  }
-  const value = await sendHttpRequest(`${process.env.NESTSERVER}/api/v1/device/${device}/run/${action}`);
-  return NextResponse.json(value);
+  //const value = await sendHttpRequest(`${process.env.NESTSERVER}/api/v1/device/${device}/run/${action}`);
+  return NextResponse.json({
+    "meta": {
+      "ui_type": "heating",
+      "title": "Balcony"
+    },
+
+  });
 }
 
 async function sendHttpRequest(part) {

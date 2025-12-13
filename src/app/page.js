@@ -3,13 +3,11 @@
 import useSWR from "swr";
 import {
   ErrorBox,
-  LoadingContent, NestBoxUI,
-  SceneBoxUI,
-  StatelessSceneBoxUI,
-  StateSceneBoxUI,
-  TestDeviceObject
+  LoadingContent
 } from "@/app/components/BaseUI";
 import {Icon} from "@iconify/react";
+import {NestBoxUI, StatelessSceneBoxUI, StateSceneBoxUI} from "@/app/components/MainPage";
+import {TemperatureIcon} from "@/app/components/BaseIcons";
 
 export default function Home() {
     // get from backend
@@ -55,7 +53,7 @@ function Header() {
           <div className="flex items-center flex-col">
             <div className="flex items-center text-2xl text-white">
               <p className="font-bold font-mono">22</p>
-              <Icon icon="fluent:temperature-degree-celsius-16-filled" className="text-3xl"/>
+              <TemperatureIcon className="text-3xl"/>
             </div>
             <p className="text-white font-normal text-sm">Bedroom temp</p>
           </div>
@@ -63,7 +61,7 @@ function Header() {
           <div className="flex items-center flex-col">
             <div className="flex items-center text-2xl text-white">
               <p className="font-bold font-mono">-4</p>
-              <Icon icon="fluent:temperature-degree-celsius-16-filled" className="text-3xl"/>
+              <TemperatureIcon className="text-3xl"/>
             </div>
             <p className="text-white font-normal text-sm">Outside temp</p>
           </div>

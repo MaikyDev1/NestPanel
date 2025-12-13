@@ -15,3 +15,19 @@ export function GreenButton ({ title, ...restProps }) {
     </button>
   )
 }
+
+export function SimpleSwitch({color, id, defaultChecked, onChange}) {
+  return (
+    <label htmlFor={id} className="flex items-center cursor-pointer select-none text-neutral-900"
+           style={{ "--injected-accent-color": `${color}80`,
+             "--injected-base-color": `${color}60`}}>
+      <div className="relative">
+        <input type="checkbox" onChange={onChange} id={id} defaultChecked={defaultChecked} className="peer sr-only"/>
+        <div className="block h-8 rounded-full bg-gray-300 peer-checked:bg-[var(--injected-base-color)] w-14"></div>
+        <div
+          className="absolute w-6 h-6 transition bg-white rounded-full dot left-1 top-1 peer-checked:translate-x-full peer-checked:bg-[var(--injected-accent-color)]">
+        </div>
+      </div>
+    </label>
+  )
+}
