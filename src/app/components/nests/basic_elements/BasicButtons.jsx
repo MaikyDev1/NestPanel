@@ -24,12 +24,16 @@ export function StateDevice({deviceID, title, color, icon, getState, enableState
   if (data === undefined) return <ErrorBox></ErrorBox>;
 
   async function turn(param) {
-    const resp = await fetcher(`/api/v1/devices/run?device=${param.device}&action=${param.action}`)
+    if (param.params !== undefined) {
+      await fetcher(`/api/v1/devices/run?device=${param.device}&action=${param.action}&params=${encodeURIComponent(JSON.stringify(param.params))}`)
+    } else {
+      await fetcher(`/api/v1/devices/run?device=${param.device}&action=${param.action}`)
+    }
     await mutate();
   }
 
   return (
-    <div className="w-full h-[150px] flex flex-col justify-between rounded-2xl p-5" style={{background: `${color}14`}}>
+    <div className="w-full h-[150px] flex flex-col justify-between rounded-2xl p-5" style={{background: `${color}30`}}>
       <div className="flex justify-between">
         <Icon icon={icon} className="text-5xl" style={{color: `${color}`}}/>
         <SimpleSwitch onChange={() => turn((data.state === 1 ? disableState : enableState))} defaultChecked={data.state === 1} id={deviceID} color={color}/>

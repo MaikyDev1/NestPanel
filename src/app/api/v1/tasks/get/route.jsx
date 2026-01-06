@@ -4,13 +4,13 @@ import {NextResponse} from "next/server";
 
 export async function GET(request) {
   const searchParams = request.nextUrl.searchParams
-  const nest = searchParams.get('nest');
-  const action = searchParams.get('action');
-  if (nest === null || nest === undefined || nest === "all") {
-    const value = await sendHttpRequest(`${process.env.NESTSERVER}/api/v1/nests/header/all`)
+  const scene = searchParams.get('scene');
+  if (scene === null || scene === undefined || scene === "all") {
+    const value = await sendHttpRequest(`${process.env.NESTSERVER}/api/v1/scene/all`);
+    console.log(value)
     return NextResponse.json(value);
   }
-  const value = await sendHttpRequest(`${process.env.NESTSERVER}/api/v1/nests/get/${nest}`)
+  const value = await sendHttpRequest(`${process.env.NESTSERVER}/api/v1/scene/${scene}`);
   return NextResponse.json(value);
 }
 

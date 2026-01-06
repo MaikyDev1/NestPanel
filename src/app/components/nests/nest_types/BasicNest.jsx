@@ -1,7 +1,7 @@
 import {WrapToButton} from "@/app/components/nests/basic_elements/BasicButtons";
 import {WrapToData} from "@/app/components/nests/basic_elements/BasicData";
 
-export default function BasicPage({nest}) {
+export default function BasicNest({nest}) {
   let data = [];
   nest.data.forEach(element => data.push(
     <WrapToData key={element.id} data={element}/>

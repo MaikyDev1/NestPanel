@@ -1,21 +1,20 @@
 'use client'
 
-import {SimpleSwitch} from "@/app/components/Buttons";
 import useSWR from "swr";
+import React from "react";
 import {ErrorBox, LoadingContent} from "@/app/components/BaseUI";
 import {AnimatedLoadingIcon, BackIcon, TemperatureIcon} from "@/app/components/BaseIcons";
-import {Icon} from "@iconify/react";
-import {useState} from "react";
-import {HumidityBox, NoBoxByType, TemperatureBox, WrapToBox} from "@/app/components/nests/basic_elements/BasicData";
-import BasicPage from "@/app/components/nests/nest_types/BasicPage";
+import BasicNest from "@/app/components/nests/nest_types/BasicNest";
+import HeatingNest from "@/app/components/nests/nest_types/HeatingNest";
 
 const fetcher = url => fetch(url).then(r => r.json())
 
 export default function Page({params}) {
+  const { nest } = React.use(params);
   return (
     <section className="select-none h-full md:w-1/4 w-full bg-indigo-700 flex flex-col">
       <Header/>
-      <WrapToNest/>
+      <WrapToNest nestId={nest}/>
     </section>
   )
 }
@@ -37,16 +36,16 @@ function Header() {
 }
 
 function WrapToNest({nestId}) {
-  const {data, error, isLoading} = useSWR("/api/v1/nests/get?nest=asd", fetcher)
+  const {data, error, isLoading} = useSWR(`/api/v1/nests/get?nest=${nestId}`, fetcher)
   if (error) return <ErrorBox>{JSON.stringify(error)}</ErrorBox>;
   if (isLoading) return <LoadingNest/>;
   if (data === undefined) return <ErrorBox>Nest was not loaded</ErrorBox>;
-  switch (data.meta.ui_type) {
-    case "basic_nest":
-      return <BasicPage nest={data}/>
-    case "humidity":
-      return <HumidityBox deviceID={data.id} color={data.meta.color === undefined ? "#202020" : data.meta.color}
-                          title={data.meta.title}  getState={data.value}/>
+  if (data.error !== undefined) return <ErrorBox>{data.error}</ErrorBox>;
+  switch (data.meta.ui_type.toUpperCase()) {
+    case "BASIC_NEST":
+      return <BasicNest nest={data}/>
+    case "THERMOSTAT_NEST":
+      return <HeatingNest nest={data}/>
     default:
       return <NoNestByType type={data.meta.ui_type}/>
   }

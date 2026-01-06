@@ -101,7 +101,7 @@ function Nests() {
   let html = [];
   data.forEach(part => {
     html.push(
-      <NestBoxUI key={part.id} currentState={false} meta={part.meta} icon={part.icon} color={part.color} devices_count={part.devices_count} nestId={part.id}/>
+      <NestBoxUI key={part.id} meta={part.meta} devices_count={part.devices_count} nestId={part.id}/>
     )
   })
   return html;

@@ -53,12 +53,12 @@ export function StateSceneBoxUI({currentState, title, description, icon, sceneId
   )
 }
 
-export function NestBoxUI({currentState, meta, description, icon, color, devices_count, nestId}) {
+export function NestBoxUI({meta, devices_count, nestId}) {
   return (
-    <a href={`/${nestId}`} className={`group cursor-pointer select-none hover:bg-amber-400/30text-neutral-800 flex justify-center aspect-square w-full p-4 rounded-2xl`} style={{background: `${color}20`}}>
+    <a href={`/${nestId}`} className={`group cursor-pointer select-none hover:bg-amber-400/30text-neutral-800 flex justify-center aspect-square w-full p-4 rounded-2xl`} style={{background: `${meta.color}20`}}>
       <div id={nestId} className="flex rounded-2xl gap-5 flex-col justify-center items-center">
-        <div className="flex items-center justify-center flex-col rounded-full p-3" style={{background: `${color}50`}}>
-          <Icon className={`text-4xl`} style={{color: color}} icon={icon}/>
+        <div className="flex items-center justify-center flex-col rounded-full p-3" style={{background: `${meta.color}50`}}>
+          <Icon className={`text-4xl`} style={{color: meta.color}} icon={meta.icon}/>
         </div>
         <div className="flex flex-col justify-center items-center">
           <p className="font-semibold text-sm">{meta.title}</p>
