@@ -2,7 +2,7 @@
 
 import useSWR from "swr";
 import React from "react";
-import {ErrorBox, LoadingContent} from "@/app/components/BaseUI";
+import {ErrorBox, LoadingBox, LoadingContent} from "@/app/components/BaseUI";
 import {AnimatedLoadingIcon, BackIcon, TemperatureIcon} from "@/app/components/BaseIcons";
 import BasicNest from "@/app/components/nests/nest_types/BasicNest";
 import HeatingNest from "@/app/components/nests/nest_types/HeatingNest";
@@ -38,7 +38,7 @@ function Header() {
 function WrapToNest({nestId}) {
   const {data, error, isLoading} = useSWR(`/api/v1/nests/get?nest=${nestId}`, fetcher)
   if (error) return <ErrorBox>{JSON.stringify(error)}</ErrorBox>;
-  if (isLoading) return <LoadingNest/>;
+  if (isLoading) return <LoadingBox/>;
   if (data === undefined) return <ErrorBox>Nest was not loaded</ErrorBox>;
   if (data.error !== undefined) return <ErrorBox>{data.error}</ErrorBox>;
   switch (data.meta.ui_type.toUpperCase()) {

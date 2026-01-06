@@ -8,10 +8,9 @@ export async function GET(request) {
   const task = searchParams.get('task');
   if (group === null || group === undefined || group === "all" ||
     task === null || task === undefined || task === "all") {
-    const value = await sendHttpRequest(`${process.env.NESTSERVER}/api/v1/tasks/get/all`);
-    return NextResponse.json(value);
+    return NextResponse.json({error: "No task and group"});
   }
-  const value = await sendHttpRequest(`${process.env.NESTSERVER}/api/v1/tasks/${scene}`);
+  const value = await sendHttpRequest(`${process.env.NESTSERVER}/api/v1/tasks/delete/${group}/${task}`);
   return NextResponse.json(value);
 }
 

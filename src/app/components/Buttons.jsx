@@ -16,6 +16,16 @@ export function GreenButton ({ title, ...restProps }) {
   )
 }
 
+export function GrayButton ({ title, ...restProps }) {
+  return (
+    <button {...restProps}
+            className="py-2 px-3 select-none font-semibold text-neutral-900 hover:border-b-neutral-600 hover:bg-neutral-700 transition duration-300 text rounded-2xl bg-neutral-600 border-b-2 border-b-neutral-500">
+      {title}
+    </button>
+  )
+}
+
+
 export function SimpleSwitch({color, id, defaultChecked, onChange}) {
   return (
     <label htmlFor={id} className="flex items-center cursor-pointer select-none text-neutral-900"

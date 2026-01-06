@@ -1,5 +1,5 @@
 import { Icon } from "@iconify/react";
-import {useState} from "react";
+import React, {useState} from "react";
 import {GreenButton} from "@/app/components/Buttons";
 import useSWR from "swr";
 import {AnimatedLoadingIcon} from "@/app/components/BaseIcons";
@@ -7,9 +7,13 @@ import {AnimatedLoadingIcon} from "@/app/components/BaseIcons";
 export function LoadingContent() {
   return (
     <main className="h-full w-full">
-      <AnimatedLoadingIcon className="text-3xl animate-pulse"/>
+      <AnimatedLoadingIcon className="text-2xl text-black/10 animate-pulse"/>
     </main>
   )
+}
+
+export function LoadingBox() {
+  return <div className="bg-neutral-300 h-full rounded-t-2xl"><div className="w-full h-full bg-white rounded-t-2xl animate-pulse"></div></div>
 }
 
 export function ErrorBox({children}) {
@@ -19,6 +23,42 @@ export function ErrorBox({children}) {
     </main>
   )
 }
+
+export function InputTypeBox({id, title, placeholder, defaultText, error}) {
+  return (
+    <div className="w-full">
+      {title ?
+        <label className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" htmlFor={id}>
+          {title}
+        </label> : null}
+      <input className={(error ? "ring-2 ring-rose-600 text-rose-600 " : "focus:ring-2 focus:ring-amber-400 mb-2") + " appearance-none outline-none bg-neutral-100 w-full rounded py-2 px-3"}
+             id={id} type="text" placeholder={placeholder} defaultValue={defaultText}/>
+      {error ?
+        <p className="text-red text-xs italic mt-1 text-rose-600">{error}</p> : null}
+    </div>
+  )
+}
+
+export function SelectTypeBox ({id, title, children, onChange}) {
+  return (
+    <div className="w-full">
+      <label className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" htmlFor={id}>
+        {title}
+      </label>
+      <select
+        onChange={onChange}
+        className="appearance-none outline-none bg-neutral-100 focus:ring-2 focus:ring-amber-400 w-full rounded py-2 px-3 mb-3"
+        id={id}>
+        {children}
+      </select>
+    </div>
+  )
+}
+
+export function SelectItem({value, text, checked}) {
+  return <option value={value} defaultChecked={checked}>{text}</option>
+}
+
 
 export function PopUp({icon, title, description, popup, setPopup}) {
   if (!popup) return null;

@@ -1,6 +1,6 @@
 import {Icon} from "@iconify/react";
 import useSWR from "swr";
-import {ErrorBox} from "@/app/components/BaseUI";
+import {ErrorBox, LoadingBox} from "@/app/components/BaseUI";
 import {StateDevice} from "@/app/components/nests/basic_elements/BasicButtons";
 import {GreenButton, RedButton, SimpleSwitch} from "@/app/components/Buttons";
 
@@ -9,6 +9,7 @@ const fetcher = url => fetch(url).then(r => r.json())
 export default function HeatingNest({nest}) {
   const {data, error, isLoading, mutate} = useSWR(`/api/v1/devices/run?device=${nest.get_time.device}&action=${nest.get_time.action}`, fetcher)
   if (error) return <ErrorBox>{JSON.stringify(error)}</ErrorBox>;
+  if (isLoading) return <LoadingBox/>
   if (data === undefined) return <ErrorBox></ErrorBox>;
   const time = data[nest.get_time.read_parameter];
   return (
