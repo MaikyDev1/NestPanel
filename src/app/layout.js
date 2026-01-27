@@ -24,10 +24,8 @@ export default function RootLayout({ children }) {
       <Head>
         <link rel="manifest" href="/src/app/manifest.json" />
       </Head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <main className="bg-neutral-700 flex justify-center h-screen w-screen">
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased overscroll-none touch-none`}>
+        <main className="bg-neutral-700 flex flex-col justify-center items-center h-screen w-screen">
           {children}
         </main>
       </body>

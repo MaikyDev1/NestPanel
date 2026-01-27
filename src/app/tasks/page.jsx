@@ -1,6 +1,6 @@
 'use client'
 
-import React, {useState} from "react";
+import React, {useRef, useState} from "react";
 import {
   BackIcon,
   ControlMouseIcon,
@@ -13,7 +13,9 @@ import {
 import {ErrorBox, InputTypeBox, LoadingBox, SelectItem, SelectTypeBox} from "@/app/components/BaseUI";
 import useSWR from "swr";
 import {Icon} from "@iconify/react";
-import {GrayButton, GreenButton, RedButton, SimpleSwitch} from "@/app/components/Buttons";
+import {GreenButton, RedButton, SimpleSwitch} from "@/app/components/Buttons";
+import {DraggableDialogBox} from "@/app/FlareUI/Mobile/DialogBoxes";
+import {BlackButton, GrayButton} from "@/app/FlareUI/Basic/Buttons";
 
 const fetcher = url => fetch(url).then(r => r.json())
 
@@ -32,8 +34,10 @@ export default function Page() {
     menuObject = <AddNewTaskMenu data={data} setMenu={setMenu} menu={menu}/>
   else if (menu.includes("delete"))
     menuObject = <DeleteConfirmationMenu menu={menu} setMenu={setMenu}/>
+  else if (menu.includes("edit_success"))
+    menuObject = <DeleteConfirmationMenu menu={menu} setMenu={setMenu}/>
   else if (menu.includes("edit"))
-    menuObject = <ChangeTaskMenu menu={menu} setMenu={setMenu}/>
+    menuObject = <ChangeTaskMenu menu={menu} data={data} setMenu={setMenu}/>
   return (
     <section className="select-none h-full md:w-1/4 w-full bg-indigo-700 flex flex-col">
       {menuObject}
@@ -74,52 +78,107 @@ function AddNewTaskMenu({data, menu, setMenu}) {
   for (const group in data)
     groups.push(<SelectItem value={group} key={group} text={group}/>)
   return (
+    <DraggableDialogBox onClose={() => setMenu("none")}>
+      <div className="flex flex-col items-center justify-center">
+        <h1 className="font-bold text-neutral-900 text-2xl">Create a new task</h1>
+      </div>
+      <div className="px-5 mt-5 gap-2 flex flex-col w-full">
+        <p className="text-sm">Create a new task that you want to run on a schedule</p>
+        <SelectTypeBox id="group" title="Group">
+          {groups}
+          <SelectItem value="new_group" key="new_group" text={"New Group"}/>
+        </SelectTypeBox>
+        <InputTypeBox id="name" title="Task name" placeholder="Name"/>
+      </div>
+      <div className="pt-6 grid grid-cols-2 w-2/3 gap-2">
+        <GrayButton onClick={() => setMenu("none")} title="Close"/>
+        <BlackButton onClick={() => {
+          fetcher(`/api/v1/tasks/delete?group=${args[1]}&task=${args[2]}`).then(r => setMenu("refresh"))
+        }} title="Delete"/>
+      </div>
+    </DraggableDialogBox>
+  )
+}
+
+function ChangeTaskMenu({data, menu, setMenu}) {
+  async function sendRequest() {
+    const form = document.getElementById("cmd_form");
+    const formData = new FormData(form);
+    const payload = {
+      id: document.getElementById("name").value,
+      group: document.getElementById("group").value,
+      schedule: {
+        time: document.getElementById("when_time").value,
+      },
+      commands: formData.getAll("command"),
+    }
+    const res = await fetch("api/v1/tasks/add", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(payload)
+    });
+    setMenu("edit_success");
+  }
+  let args = menu.split("|");
+  let groups = [];
+  for (const group in data)
+    groups.push(<SelectItem value={group} key={group} text={group}/>)
+  const task = data[args[1]].find(t => t.id === args[2]);
+  let commands = [];
+  for (const command of task.commands)
+    commands.push(<InputTypeBox name="command" key={`cmd-${command}`} id={`cmd-${command}`} defaultText={command} placeholder="command"/>)
+  return (
     <main className="z-10 absolute top-0 left-0 h-screen w-screen flex justify-center items-center bg-white/10 backdrop-blur">
-      <div className={"lg:w-1/5 md:w-1/3 w-full mx-4 rounded-2xl flex flex-col justify-between items-center py-10 bg-white shadow-2xl"}>
+      <div className={"lg:w-1/5 md:w-1/3 w-full mx-4 rounded-2xl flex flex-col justify-between items-center py-5 bg-white shadow-2xl"}>
         <div className="flex flex-col items-center justify-center">
-          <h1 className="font-bold text-neutral-900 text-2xl">Create a new task</h1>
+          <h1 className="font-bold text-neutral-900 text-2xl">Edit {args[2]}</h1>
         </div>
         <div className="px-5 mt-5 gap-2 flex flex-col w-full">
-          <p className="text-sm">Create a new task that you want to run on a schedule</p>
-          <SelectTypeBox id="group" title="Group">
+          <p className="text-sm">Edit this task</p>
+          <SelectTypeBox id="group" defaultValue={args[1]} title="New group">
             {groups}
             <SelectItem value="new_group" key="new_group" text={"New Group"}/>
           </SelectTypeBox>
-          <InputTypeBox id="name" title="Task name" placeholder="Name"/>
+          <InputTypeBox id="name" title="Task name" defaultText={args[2]} placeholder="Name"/>
+          <p>Schedule</p>
+          <div className="flex gap-2">
+            <SelectTypeBox id="when_run" defaultValue={args[1]} title="New group">
+              <SelectItem value="everyday" key="everyday" text={"everyday"}/>
+            </SelectTypeBox>
+            <InputTypeBox id="when_time" title="Hour" defaultText={task.schedule.time} placeholder="00:00"/>
+          </div>
+          <p>Commands</p>
+          <form id="cmd_form">
+            {commands}
+          </form>
         </div>
         <div className="pt-6 grid grid-cols-2 w-2/3 gap-2">
           <GrayButton onClick={() => setMenu("none")} title="Close"/>
-          <GreenButton onClick={() => {
-            fetcher(`/api/v1/tasks/delete?group=${args[1]}&task=${args[2]}`).then(r => setMenu("refresh"))
-          }} title="Delete"/>
+          <GreenButton onClick={() => sendRequest()} title="Update"/>
         </div>
       </div>
     </main>
   )
 }
 
-function ChangeTaskMenu({setMenu}) {
-
-}
-
 function DeleteConfirmationMenu({menu, setMenu}) {
   let args = menu.split("|");
   return (
-    <main className="z-10 absolute top-0 left-0 h-screen w-screen flex justify-center items-center bg-white/10 backdrop-blur">
-      <div className={"lg:w-1/5 md:w-1/3 w-full mx-4 rounded-2xl flex flex-col justify-between items-center py-10 bg-white shadow-2xl"}>
-        <div className="flex flex-col items-center justify-center">
-          <DeleteIcon className="text-7xl text-green-400"/>
-          <h1 className="font-bold text-neutral-900 text-2xl">Delete {args[2]}?</h1>
-        </div>
-        <p className="px-4 text-center text-neutral-600 pt-2">Confirm deletion of this task. This action is permanent and cannot be reversed.</p>
-        <div className="pt-6 grid grid-cols-2 w-2/3 gap-2">
-          <GreenButton onClick={() => setMenu("none")} title="Close"/>
-          <RedButton onClick={() => {
-            fetcher(`/api/v1/tasks/delete?group=${args[1]}&task=${args[2]}`).then(r => setMenu("refresh"))
-          }} title="Delete"/>
-        </div>
+    <DraggableDialogBox onClose={() => setMenu("none")}>
+      <div className="flex flex-col items-center justify-center">
+        <DeleteIcon className="text-7xl text-green-400"/>
+        <h1 className="font-bold text-neutral-900 text-2xl">Delete {args[2]}?</h1>
       </div>
-    </main>
+      <p className="px-4 text-center text-neutral-600 pt-2">Confirm deletion of this task. This action is permanent and cannot be reversed.</p>
+      <div className="pt-6 grid grid-cols-2 w-2/3 gap-2">
+        <GrayButton onClick={() => setMenu("none")} title="Close"/>
+        <BlackButton onClick={() => {
+          fetcher(`/api/v1/tasks/delete?group=${args[1]}&task=${args[2]}`).then(r => setMenu("refresh"))
+        }} title="Delete"/>
+      </div>
+    </DraggableDialogBox>
   )
 }
 

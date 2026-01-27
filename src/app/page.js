@@ -29,6 +29,11 @@ export default function Home() {
             </div>
           </div>
         </div>
+        <nav className="">
+          <div className="">
+
+          </div>
+        </nav>
       </section>
     );
 }
