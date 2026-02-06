@@ -8,101 +8,67 @@ import {
 import {Icon} from "@iconify/react";
 import {ControlMouseIcon, FeatherIcon, LightingIcon, TemperatureIcon} from "@/app/components/BaseIcons";
 import {useState} from "react";
+import {CogIcon, HomeNavigationIcon, IconByTemperature} from "@/app/FlareUI/FlareIcons";
+import {MobileNavigation} from "@/app/FlareUI/Mobile/NavigationBars";
 
 export default function Home() {
-    return (
-      <section className="select-none h-full md:w-1/4 w-full bg-indigo-700 flex flex-col">
-        <Header/>
-        {/* Scenes */}
-        <div className="bg-white pt-2 rounded-t-2xl flex flex-col flex-grow">
-          <div className="flex flex-col  w-full p-2">
-            <h1 className="text-neutral-900 font-thin ml-2">Scenes</h1>
-            <div className="grid grid-cols-2 gap-3">
-              <Scenes/>
+  const [display, setDisplay] = useState("devices");
+  return (
+    <section className="select-none md:w-1/4 flex flex-col w-full h-full bg-white">
+      {/* Scenes */}
+      <div className="grid grid-cols-2 p-2">
+        <section className="p-2">
+          <p className="text-xl">Buna, Pam</p>
+        </section>
+        <div className="bg-stone-800 col-span-2 rounded-2xl p-3">
+          <div className="text-white text-3xl font-bold flex justify-between">
+            <div>
+              <p>-42ºC</p>
+              <p className="text-lg font-mono">Good</p>
             </div>
+            <IconByTemperature temperature={10} className="relative -translate-x-1 -translate-y-1 text-5xl"/>
           </div>
-          {/* Devices */}
-          <div className="flex flex-col justify-center w-full p-2">
-            <h1 className="text-neutral-900 font-thin ml-2">Nests</h1>
-            <div className="grid grid-cols-2 gap-3 mt-3">
-              <Nests/>
+          <p className="text-stone-400 text-sm">Outside humidity 54%</p>
+          <div className="flex text-sm mt-2 justify-between">
+            <div className="text-white">
+              <p className="font-bold text-white">Indoor temp</p>
+              <p className="text-stone-400">22ºC</p>
+            </div>
+            <div className="text-white">
+              <p className="font-bold text-white">Humidity</p>
+              <p className="text-stone-400">67%</p>
+            </div>
+            <div className="text-white">
+              <p className="font-bold text-white">Air Quality</p>
+              <p className="text-stone-400">NaN</p>
             </div>
           </div>
         </div>
-        <nav className="">
-          <div className="">
-
+      </div>
+      <div className="grid grid-cols-2 my-1 mx-2 bg-gray-200 gap-1 p-1 col-span-2 rounded-xl">
+        <div onClick={() => setDisplay("devices")} className={`rounded-lg p-1 text-center ${display === "devices" ? "bg-stone-800 grow text-white" : "bg-white grow text-black"}`}>
+          Nests
+        </div>
+        <div onClick={() => setDisplay("nests")} className={`rounded-lg p-1 text-center ${display === "nests" ? "bg-stone-800 grow text-white" : "bg-white grow text-black"}`}>
+          Scenes
+        </div>
+      </div>
+      <section className="flex-1 overflow-hidden">
+        {display === "devices" ?
+          <div className="grid grid-cols-2 p-2 gap-1 h-full overflow-y-auto">
+            <Nests/>
+          </div> :
+          <div className="grid grid-cols-2 p-2 gap-1 h-full overflow-y-auto">
+            <Scenes/>
           </div>
-        </nav>
+        }
       </section>
-    );
+      <MobileNavigation/>
+    </section>
+  );
 }
 
 const fetcher = url => fetch(url).then(r => r.json())
-
-function Header() {
-  const [popup, setPopup] = useState(false);
-  return (
-    <div className="p-6">
-      {!popup ? null :
-        <div className="absolute select none left-0 z-50 flex flex-col w-full items-center bg-white/10 backdrop-blur top-0 h-full">
-          <nav className="mt-6 flex flex-col justify-center md:w-[23%] w-full gap-2 items-center bg-gray-700/90 backdrop-blur-sm rounded-2xl p-3">
-            <a href="/tasks" className="cursor-pointer flex w-2/3 p-2 justify-center items-center gap-3">
-              <LightingIcon className="text-yellow-400 text-4xl"/>
-              <p className="font-mono text-white font-bold">Tasks</p>
-            </a>
-            <div className="cursor-pointer flex w-2/3 border-t-neutral-500 border-t p-3 justify-center items-center gap-3">
-              <ControlMouseIcon className="text-red-300 text-4xl"/>
-              <p className="font-mono text-white font-bold">Devices</p>
-            </div>
-            <div className="cursor-pointer flex w-2/3 border-t-neutral-500 border-t p-3 justify-center items-center gap-3">
-              <FeatherIcon className="text-blue-300 text-4xl"/>
-              <p className="font-mono text-white font-bold">Nests</p>
-            </div>
-            <div onClick={() => setPopup(false)} className="cursor-pointer flex w-2/3 justify-center items-center bg-indigo-700 p-2 rounded-2xl gap-3">
-              <p className="font-mono text-white font-bold">Exit</p>
-            </div>
-          </nav>
-        </div>
-      }
-      <div className="flex flex-col justify-center gap-4">
-        <div className="flex items-center gap-4">
-          <Icon icon="duo-icons:dashboard" className="text-4xl text-white/50 ring ring-white/50 rounded-lg p-1" onClick={() => setPopup(true)}/>
-          <div className="flex flex-col text-white">
-            <p><span className="font-bold">Welcome</span> to NestHome</p>
-            <p className="text-sm font-thin">Made by Maiky</p>
-          </div>
-        </div>
-      {/* Examples */}
-        <nav className="flex justify-between px-4">
-          {/* Temperature */}
-          <div className="flex items-center flex-col">
-            <div className="flex items-center text-2xl text-white">
-              <p className="font-bold font-mono">0</p>
-              <TemperatureIcon className="text-3xl"/>
-            </div>
-            <p className="text-white font-normal text-sm">Bedroom temp</p>
-          </div>
-          {/* Some state */}
-          <div className="flex items-center flex-col">
-            <div className="flex items-center text-2xl text-white">
-              <p className="font-bold font-mono">0</p>
-              <TemperatureIcon className="text-3xl"/>
-            </div>
-            <p className="text-white font-normal text-sm">Outside temp</p>
-          </div>
-          {/* Current consumtion */}
-          <div className="flex items-center flex-col">
-            <div className="flex items-center text-2xl text-white">
-              <p className="font-bold font-mono">0.0KW</p>
-            </div>
-            <p className="text-white font-normal text-sm">Home consumtion</p>
-          </div>
-        </nav>
-      </div>
-    </div>
-  )
-}
 
 function Scenes() {
   const {data, error, isLoading} = useSWR("/api/v1/scenes/get", fetcher)
@@ -124,6 +90,7 @@ function Nests() {
   if (error) return <ErrorBox>{JSON.stringify(error)}</ErrorBox>;
   if (isLoading) return <LoadingContent/>;
   if (data === undefined) return <ErrorBox>Data is undifiend</ErrorBox>;
+  if (data === {}) return <p>No data was forwarded!</p>
   let html = [];
   data.forEach(part => {
     html.push(
@@ -185,16 +152,27 @@ export function StateSceneBoxUI({currentState, title, description, icon, sceneId
 
 export function NestBoxUI({meta, devices_count, nestId}) {
   return (
-    <a href={`/${nestId}`} className={`group cursor-pointer select-none hover:bg-amber-400/30text-neutral-800 flex justify-center aspect-square w-full p-4 rounded-2xl`} style={{background: `${meta.color}20`}}>
-      <div id={nestId} className="flex rounded-2xl gap-5 flex-col justify-center items-center">
-        <div className="flex items-center justify-center flex-col rounded-full p-3" style={{background: `${meta.color}50`}}>
-          <Icon className={`text-4xl`} style={{color: meta.color}} icon={meta.icon}/>
-        </div>
-        <div className="flex flex-col justify-center items-center">
-          <p className="font-semibold text-sm">{meta.title}</p>
-          <p className="font-thin text-xs">{devices_count === undefined ? "" : devices_count + " devices"}</p>
-        </div>
+    <div className="aspect-square bg-zinc-200 rounded-[2rem] p-5 flex flex-col justify-between shadow-lg">
+      <div className="flex items-center justify-between">
+        <Icon className={`text-5xl bg-white p-2 text-stone-800 rounded-full`} icon={meta.icon}/>
       </div>
-    </a>
+      <div>
+        <p>{meta.title}</p>
+        <p className="font-thin text-xs">{devices_count === undefined ? "Stanalone" : devices_count + " devices"}</p>
+      </div>
+    </div>
   )
+  // return (
+  //   <a href={`/${nestId}`} className={`group cursor-pointer select-none hover:bg-amber-400/30text-neutral-800 flex justify-center aspect-square w-full p-4 rounded-2xl`} style={{background: `${meta.color}20`}}>
+  //     <div id={nestId} className="flex rounded-2xl gap-5 flex-col justify-center items-center">
+  //       <div className="flex items-center justify-center flex-col rounded-full p-3" style={{background: `${meta.color}50`}}>
+  //         <Icon className={`text-4xl`} style={{color: meta.color}} icon={meta.icon}/>
+  //       </div>
+  //       <div className="flex flex-col justify-center items-center">
+  //         <p className="font-semibold text-sm">{meta.title}</p>
+  //         <p className="font-thin text-xs">{devices_count === undefined ? "" : devices_count + " devices"}</p>
+  //       </div>
+  //     </div>
+  //   </a>
+  // )
 }
