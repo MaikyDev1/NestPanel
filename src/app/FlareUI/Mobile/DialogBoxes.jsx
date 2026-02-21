@@ -28,7 +28,7 @@ export function DraggableDialogBox({children, onClose}) {
   };
 
   return (
-    <main className={`z-10 absolute left-0 h-screen w-screen flex flex-col justify-end items-center bg-black/50`}>
+    <main className={`z-10 absolute left-0 top-0 h-screen w-screen flex flex-col justify-end items-center bg-black/50`}>
       <div className="md:w-1/4 w-full animate-slide-up rounded-t-[30px] pb-10 pt-2 flex flex-col justify-between items-center bg-white shadow-2xl"
            onTouchStart={handleTouchStart} onTouchMove={handleTouchMove} onTouchEnd={handleTouchEnd}>
         <HorizontalLine className="text-3xl text-gray-300 mb-1"/>

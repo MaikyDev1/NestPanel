@@ -1,32 +1,24 @@
 import {HomeNavigationIcon} from "@/app/FlareUI/FlareIcons";
-import {useState} from "react";
+import {createContext, useContext, useMemo, useState} from "react";
+import React from 'react';
 
-export function MobileNavigation() {
-  const [active, setActive] = useState(1);
+const MobileNavContext = createContext(0, undefined);
 
-  const base =
-    "text-5xl p-2 rounded-2xl transition-all duration-300 ease-out active:scale-95";
-
-  const activeClass = "bg-white text-rose-400 scale-110 shadow-md";
-
+export function MobileNavigation({defaultActive = 0, children}) {
+  const [active, setActive] = useState(defaultActive);
   return (
-    <div className="absolute bottom-0 p-3 md:w-1/4 w-full">
+    <MobileNavContext.Provider value={{ active, setActive }} className="absolute bottom-0 p-3 md:w-1/4 w-full">
       <nav className="p-2 rounded-2xl flex justify-between bg-stone-800">
-        {[1, 2, 3, 4].map((i) => (
-          <HomeNavigationIcon
-            key={i}
-            onClick={() => setActive(i)}
-            className={`${base} ${active === i ? activeClass : "text-white"}`}
-          />
-        ))}
+        {children}
       </nav>
-    </div>
+    </MobileNavContext.Provider>
   );
 }
 
-export function MobileNavigationElement({icon}) {
+export function MobileNavigationElement({icon, onClick, index}) {
+  const { active, setActive } = useContext(MobileNavContext);
   return (
-    <div className="">
+    <div onClick={() => {setActive(index); onClick?.()}} className={`text-5xl p-2 rounded-2xl transition-all duration-300 ease-out active:scale-95 ${active === index ? "bg-white text-rose-400 scale-110 shadow-md" : "text-white"}`}>
       {icon}
     </div>
   )
