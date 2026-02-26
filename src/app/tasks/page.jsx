@@ -16,10 +16,13 @@ import {Icon} from "@iconify/react";
 import {GreenButton, RedButton, SimpleSwitch} from "@/app/components/Buttons";
 import {DraggableDialogBox} from "@/app/FlareUI/Mobile/DialogBoxes";
 import {BlackButton, GrayButton} from "@/app/FlareUI/Basic/Buttons";
+import {MobileNavigation, MobileNavigationElement} from "@/app/FlareUI/Mobile/NavigationBars";
+import {AccountIcon, CogIcon, HomeNavigationIcon, MoreActionsDots, TimeNavigationIcon} from "@/app/FlareUI/FlareIcons";
+import {Tasks} from "@/app/tasks/TaskGroupComponent";
 
 const fetcher = url => fetch(url).then(r => r.json())
 
-export default function Page() {
+export default function Home() {
   const [menu, setMenu] = useState("none");
   const {data, error, isLoading, mutate} = useSWR(`/api/v1/tasks/get`, fetcher)
   if (error) return <ErrorBox>{JSON.stringify(error)}</ErrorBox>;
@@ -39,37 +42,52 @@ export default function Page() {
   else if (menu.includes("edit"))
     menuObject = <ChangeTaskMenu menu={menu} data={data} setMenu={setMenu}/>
   return (
-    <section className="select-none h-full md:w-1/4 w-full bg-indigo-700 flex flex-col">
-      {menuObject}
-      <Header setMenu={setMenu}/>
-      <Tasks menu={menu} data={data} setMenu={setMenu}/>
-    </section>
-  )
+      <section className="select-none md:w-1/4 flex flex-col w-full h-full bg-white">
+        {/* Scenes */}
+        {menuObject}
+        <div className="grid grid-cols-2 p-2">
+          <section className="p-2">
+            <p className="text-xl">Buna, asd</p>
+          </section>
+        </div>
+        <section className="flex-1 px-2 overflow-hidden">
+          <p className="py-1 font-mono font-semibold">Actions</p>
+          <Header/>
+          <p className="py-1 font-mono font-semibold">Tasks</p>
+          <Tasks data={data}/>
+        </section>
+        <MobileNavigation defaultActive={1}>
+          <MobileNavigationElement href="/" icon={<HomeNavigationIcon/>} index={0}/>
+          <MobileNavigationElement icon={<TimeNavigationIcon/>} index={1}/>
+          <MobileNavigationElement icon={<CogIcon/>} index={2}/>
+          <MobileNavigationElement icon={<AccountIcon/>} index={3}/>
+        </MobileNavigation>
+      </section>
+  );
 }
 
 function Header({setMenu}) {
   return (
-    <div className="p-6">
-      <div className="flex flex-col justify-center gap-4">
-        <a href="/" className="flex items-center gap-4">
-          <BackIcon className="text-4xl text-white/50 ring ring-white/50 rounded-lg p-1"/>
-          <div className="flex flex-col text-white">
-            <p><span className="font-bold">Welcome</span> to NestHome</p>
-            <p className="text-sm font-thin">Made by Maiky</p>
+      <nav className="flex justify-center items-center gap-2">
+        <div onClick={() => setMenu("create")} className="cursor-pointer gap-1 justify-center items-center flex-col flex">
+          <div className="p-4 bg-stone-800 flex justify-center items-center rounded-lg drop-shadow aspect-square">
+            <PlusIcon className="text-lg text-white"/>
           </div>
-        </a>
-        <nav className="grid grid-cols-2 gap-2">
-          <div onClick={() => setMenu("create")} className="cursor-pointer bg-white text-gray-800 gap-2 py-2 rounded-xl flex justify-center items-center">
-            <PlusIcon className="text-lg"/>
-            <p>Add new task</p>
+          <p>New task</p>
+        </div>
+        <div onClick={() => setMenu("create")} className="cursor-pointer gap-1 justify-center items-center flex-col flex">
+          <div className="p-4 bg-stone-800 flex justify-center items-center rounded-lg drop-shadow aspect-square">
+            <FeatherIcon className="text-lg text-white"/>
           </div>
-          <div className="cursor-pointer bg-white text-gray-800 gap-2 py-2 rounded-xl flex justify-center items-center">
-            <FeatherIcon className="text-lg"/>
-            <p>See timings</p>
+          <p>Logs</p>
+        </div>
+        <div onClick={() => setMenu("create")} className="cursor-pointer gap-1 justify-center items-center flex-col flex">
+          <div className="p-4 bg-stone-800 flex justify-center items-center rounded-lg drop-shadow aspect-square">
+            <CogIcon className="text-lg text-white"/>
           </div>
-        </nav>
-      </div>
-    </div>
+          <p>Configure</p>
+        </div>
+      </nav>
   )
 }
 
@@ -182,52 +200,3 @@ function DeleteConfirmationMenu({menu, setMenu}) {
   )
 }
 
-function Tasks({data, menu, setMenu}) {
-  let content = [];
-  for (const groupId in data) {
-    content.push(<TaskGroup key={groupId} groupId={groupId} setMenu={setMenu} tasks={data[groupId]}/>);
-  }
-  return (
-    <div className="bg-white pt-2 rounded-t-2xl flex flex-col flex-grow">
-      <div className="flex flex-col  w-full p-2">
-        {content}
-      </div>
-    </div>
-  )
-}
-
-function TaskGroup({groupId, tasks, setMenu}) {
-  let content = [];
-  for (const task of tasks) {
-    content.push(<TaskInterface key={task.id} groupId={groupId} task={task} setMenu={setMenu}/>);
-  }
-  return (
-    <div>
-      <h1 className="text-neutral-900 font-thin text-lg ml-2">Tasks of {groupId}</h1>
-      <div className="grid grid-cols-2 gap-3">
-        {content}
-      </div>
-    </div>
-  )
-}
-
-function TaskInterface({task, groupId, setMenu}) {
-  return (
-    <div className="bg-neutral-100 p-3 rounded-2xl">
-      <p className="text-xs font-mono font-bold text-gray-800/50 uppercase">Task name:</p>
-      <p className="text-xs font-mono font-bold text-gray-800/80">{task.id}</p>
-      <p className="text-xs font-mono font-bold text-gray-800/50 uppercase">Timing</p>
-      <p className="text-xs font-mono font-bold text-gray-800/80">everyday at {task.schedule.time}</p>
-      <nav className="grid grid-cols-2 gap-2 mt-2 w-full">
-        <div onClick={() => setMenu(`edit|${groupId}|${task.id}`)} className="cursor-pointer flex items-center gap-1 justify-center text-emerald-600 bg-green-100 rounded-lg p-1">
-          <EditIcon className="text-xl text-emerald-600"/>
-          <p className="text-xs font-mono font-bold">Edit</p>
-        </div>
-        <div onClick={() => setMenu(`delete|${groupId}|${task.id}`)} className="cursor-pointer flex items-center gap-1 justify-center text-red-500 bg-red-100 rounded-lg p-1">
-          <DeleteIcon className="text-xl text-red-500"/>
-          <p className="text-xs font-mono font-bold">Delete</p>
-        </div>
-      </nav>
-    </div>
-  )
-}

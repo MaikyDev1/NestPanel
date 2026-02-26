@@ -16,6 +16,14 @@ export function TimeNavigationIcon(props) {
   return (<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...props}><path fill="currentColor" fillRule="evenodd" d="M12 21a9 9 0 1 0 0-18a9 9 0 0 0 0 18m1-14.5a1 1 0 1 0-2 0v5.25c0 .69.56 1.25 1.25 1.25h3.25a1 1 0 1 0 0-2H13z" clipRule="evenodd"></path></svg>);
 }
 
+export function AccountIcon(props) {
+  return (<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...props}><circle cx={12} cy={6} r={4} fill="currentColor"></circle><path fill="currentColor" d="M20 17.5c0 2.485 0 4.5-8 4.5s-8-2.015-8-4.5S7.582 13 12 13s8 2.015 8 4.5"></path></svg>);
+}
+
+export function MoreActionsDots(props) {
+  return (<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...props}><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 12a1 1 0 1 0 2 0a1 1 0 1 0-2 0m7 0a1 1 0 1 0 2 0a1 1 0 1 0-2 0m7 0a1 1 0 1 0 2 0a1 1 0 1 0-2 0"></path></svg>);
+}
+
 export function IconByTemperature({className, temperature}) {
   if (temperature <= -10) {
     return (<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 36 36" className={className}><path fill="#88c9f9" d="M19 27.586V8.415l4.828-4.829s.707-.707 0-1.415c-.707-.707-1.414 0-1.414 0L19 5.586V1s0-1-1-1s-1 1-1 1v4.586l-3.414-3.415s-.707-.707-1.414 0c-.707.708 0 1.415 0 1.415L17 8.415v19.171l-4.828 4.828s-.707.707 0 1.414s1.414 0 1.414 0L17 30.414V35s0 1 1 1s1-1 1-1v-4.586l3.414 3.414s.707.707 1.414 0s0-1.414 0-1.414z"></path><path fill="#88c9f9" d="M34.622 20.866c-.259-.966-1.225-.707-1.225-.707l-6.595 1.767l-16.603-9.586l-1.767-6.595s-.259-.966-1.225-.707S6.5 6.263 6.5 6.263l1.25 4.664l-3.972-2.294s-.866-.5-1.366.366s.366 1.366.366 1.366l3.971 2.293l-4.664 1.249s-.967.259-.707 1.225c.259.967 1.225.708 1.225.708l6.596-1.767l16.603 9.586l1.767 6.596s.259.966 1.225.707c.966-.26.707-1.225.707-1.225l-1.25-4.664l3.972 2.293s.867.5 1.367-.365c.5-.867-.367-1.367-.367-1.367l-3.971-2.293l4.663-1.249c0-.001.966-.26.707-1.226"></path><path fill="#88c9f9" d="m33.915 13.907l-4.664-1.25l3.972-2.293s.867-.501.367-1.367c-.501-.867-1.367-.366-1.367-.366l-3.971 2.292l1.249-4.663s.259-.966-.707-1.225s-1.225.707-1.225.707l-1.767 6.595l-16.604 9.589l-6.594-1.768s-.966-.259-1.225.707c-.26.967.707 1.225.707 1.225l4.663 1.249l-3.971 2.293s-.865.501-.365 1.367c.5.865 1.365.365 1.365.365l3.972-2.293l-1.25 4.663s-.259.967.707 1.225c.967.26 1.226-.706 1.226-.706l1.768-6.597l16.604-9.585l6.595 1.768s.966.259 1.225-.707c.255-.967-.71-1.225-.71-1.225"></path></svg>);

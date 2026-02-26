@@ -8,7 +8,13 @@ import {
 import {Icon} from "@iconify/react";
 import {ControlMouseIcon, FeatherIcon, LightingIcon, TemperatureIcon} from "@/app/components/BaseIcons";
 import React, {useState} from "react";
-import {CogIcon, HomeNavigationIcon, IconByTemperature, TimeNavigationIcon} from "@/app/FlareUI/FlareIcons";
+import {
+  AccountIcon,
+  CogIcon,
+  HomeNavigationIcon,
+  IconByTemperature,
+  TimeNavigationIcon
+} from "@/app/FlareUI/FlareIcons";
 import {MobileNavigation, MobileNavigationElement} from "@/app/FlareUI/Mobile/NavigationBars";
 import {DraggableDialogBox} from "@/app/FlareUI/Mobile/DialogBoxes";
 import {BlackButton, GrayButton} from "@/app/FlareUI/Basic/Buttons";
@@ -43,11 +49,11 @@ export default function Home() {
           </div>
         }
       </section>
-      <MobileNavigation>
+      <MobileNavigation defaultActive={0}>
         <MobileNavigationElement icon={<HomeNavigationIcon/>} index={0}/>
-        <MobileNavigationElement icon={<TimeNavigationIcon/>} index={1}/>
+        <MobileNavigationElement href="/tasks" icon={<TimeNavigationIcon/>} index={1}/>
         <MobileNavigationElement icon={<CogIcon/>} index={2}/>
-        <MobileNavigationElement icon={<CogIcon/>} index={3}/>
+        <MobileNavigationElement icon={<AccountIcon/>} index={3}/>
       </MobileNavigation>
     </section>
   );
