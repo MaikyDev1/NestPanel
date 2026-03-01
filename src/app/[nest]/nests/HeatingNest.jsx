@@ -1,7 +1,7 @@
 import {Icon} from "@iconify/react";
 import useSWR from "swr";
 import {ErrorBox, LoadingBox} from "@/app/components/BaseUI";
-import {StateDevice} from "@/app/components/nests/basic_elements/BasicButtons";
+import {StateDevice} from "@/app/[nest]/elements/BasicButtons";
 import {GreenButton, RedButton, SimpleSwitch} from "@/app/components/Buttons";
 
 const fetcher = url => fetch(url).then(r => r.json())
@@ -13,9 +13,8 @@ export default function HeatingNest({nest}) {
   if (data === undefined) return <ErrorBox></ErrorBox>;
   const time = data[nest.get_time.read_parameter];
   return (
-    <div className="bg-white pt-2 rounded-t-2xl flex flex-col flex-grow">
-      <div className="flex flex-col w-full p-2">
-        <h1 className="text-neutral-900 font-thin text-lg ml-2">Home heating</h1>
+    <div className="bg-white rounded-t-2xl px-4 flex flex-col flex-grow">
+      <div className="flex flex-col w-full">
         <div className="flex gap-2 flex-col">
           <WorkUntil time={time}/>
           {time !== 0?

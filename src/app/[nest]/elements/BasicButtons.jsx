@@ -1,7 +1,9 @@
 import useSWR from "swr";
 import {ErrorBox} from "@/app/components/BaseUI";
 import {Icon} from "@iconify/react";
-import {SimpleSwitch} from "@/app/components/Buttons";
+import {SimpleSwitch, SimpleVerticalSwitch} from "@/app/components/Buttons";
+import Link from "next/dist/client/link";
+import React from "react";
 
 const fetcher = url => fetch(url).then(r => r.json())
 
@@ -32,15 +34,27 @@ export function StateDevice({deviceID, title, color, icon, getState, enableState
     await mutate();
   }
 
+  // return (
+  //   <div className="w-full h-[150px] flex flex-col justify-between rounded-2xl p-5" style={{background: `${color}30`}}>
+  //     <div className="flex justify-between">
+  //       <Icon icon={icon} className="text-5xl" style={{color: `${color}`}}/>
+  //       <SimpleSwitch onChange={() => turn((data.state === 1 ? disableState : enableState))} defaultChecked={data.state === 1} id={deviceID} color={color}/>
+  //     </div>
+  //     <div className="">
+  //       <h1 className="text-md font-mono" style={{color: `${color}`}}>{title}</h1>
+  //       <p className="text-sm font-mono" style={{color: `${color}80`}}>{data.state === 1 ? "On" : "Off"}</p>
+  //     </div>
+  //   </div>
+  // )
   return (
-    <div className="w-full h-[150px] flex flex-col justify-between rounded-2xl p-5" style={{background: `${color}30`}}>
-      <div className="flex justify-between">
-        <Icon icon={icon} className="text-5xl" style={{color: `${color}`}}/>
-        <SimpleSwitch onChange={() => turn((data.state === 1 ? disableState : enableState))} defaultChecked={data.state === 1} id={deviceID} color={color}/>
+    <div className={`aspect-square ${data.state === 1 ? "bg-stone-800" : "bg-zinc-200"} rounded-[2rem] p-5 flex flex-col justify-between shadow-lg`}>
+      <div className="flex items-center justify-between">
+        <Icon className={`text-5xl bg-white p-2 text-stone-800 rounded-full`} icon={icon}/>
+        <SimpleVerticalSwitch onChange={() => turn((data.state === 1 ? disableState : enableState))} defaultChecked={data.state === 1} id={deviceID} color={color}/>
       </div>
-      <div className="">
-        <h1 className="text-md font-mono" style={{color: `${color}`}}>{title}</h1>
-        <p className="text-sm font-mono" style={{color: `${color}80`}}>{data.state === 1 ? "On" : "Off"}</p>
+      <div>
+        <p className={`${data.state !== 1 ? "text-stone-800" : "text-white"} font-semibold`}>{title}</p>
+        <p className={`font-thin ${data.state !== 1 ? "text-stone-800" : "text-white"} text-xs`}>{data.state === 1 ? "On" : "Off"}</p>
       </div>
     </div>
   )

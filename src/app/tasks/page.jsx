@@ -23,30 +23,17 @@ import {Tasks} from "@/app/tasks/TaskGroupComponent";
 const fetcher = url => fetch(url).then(r => r.json())
 
 export default function Home() {
-  const [menu, setMenu] = useState("none");
   const {data, error, isLoading, mutate} = useSWR(`/api/v1/tasks/get`, fetcher)
   if (error) return <ErrorBox>{JSON.stringify(error)}</ErrorBox>;
   if (isLoading) return <LoadingBox/>;
   if (data === undefined) return <ErrorBox>Tasks are not loaded</ErrorBox>;
   if (data.error !== undefined) return <ErrorBox>Some error: {data.error}</ErrorBox>;
 
-  if (menu.includes("refresh")) mutate().then(() => setMenu("none"))
-
-  let menuObject = null;
-  if (menu.includes("create"))
-    menuObject = <AddNewTaskMenu data={data} setMenu={setMenu} menu={menu}/>
-  else if (menu.includes("delete"))
-    menuObject = <DeleteConfirmationMenu menu={menu} setMenu={setMenu}/>
-  else if (menu.includes("edit_success"))
-    menuObject = <DeleteConfirmationMenu menu={menu} setMenu={setMenu}/>
-  else if (menu.includes("edit"))
-    menuObject = <ChangeTaskMenu menu={menu} data={data} setMenu={setMenu}/>
   return (
       <section className="select-none md:w-1/4 flex flex-col w-full h-full bg-white">
         {/* Scenes */}
-        {menuObject}
         <div className="grid grid-cols-2 p-2">
-          <section className="p-2">
+          <section className="py-2">
             <p className="text-xl">Buna, asd</p>
           </section>
         </div>
@@ -68,7 +55,7 @@ export default function Home() {
 
 function Header({setMenu}) {
   return (
-      <nav className="flex justify-center items-center gap-2">
+      <nav className="flex items-center gap-2">
         <div onClick={() => setMenu("create")} className="cursor-pointer gap-1 justify-center items-center flex-col flex">
           <div className="p-4 bg-stone-800 flex justify-center items-center rounded-lg drop-shadow aspect-square">
             <PlusIcon className="text-lg text-white"/>

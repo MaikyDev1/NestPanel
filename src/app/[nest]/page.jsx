@@ -4,43 +4,41 @@ import useSWR from "swr";
 import React from "react";
 import {ErrorBox, LoadingBox, LoadingContent} from "@/app/components/BaseUI";
 import {AnimatedLoadingIcon, BackIcon, TemperatureIcon} from "@/app/components/BaseIcons";
-import BasicNest from "@/app/components/nests/nest_types/BasicNest";
-import HeatingNest from "@/app/components/nests/nest_types/HeatingNest";
+import BasicNest from "@/app/[nest]/nests/BasicNest";
+import HeatingNest from "@/app/[nest]/nests/HeatingNest";
+import {BackArrow, VerticalDots} from "@/app/FlareUI/FlareIcons";
 
 const fetcher = url => fetch(url).then(r => r.json())
 
 export default function Page({params}) {
   const { nest } = React.use(params);
+  const {data, error, isLoading} = useSWR(`/api/v1/nests/get?nest=${nest}`, fetcher)
   return (
-    <section className="select-none h-full md:w-1/4 w-full bg-indigo-700 flex flex-col">
-      <Header/>
-      <WrapToNest nestId={nest}/>
+    <section className="select-none h-full md:w-1/4 w-full bg-white flex flex-col">
+      <Header nestName={data ? data.meta.title : "Loading"}/>
+      {data === undefined || error || data.error ? <ErrorBox>{JSON.stringify(error)}</ErrorBox> : null}
+      {!isLoading ? <WrapToNest data={data}/> : null}
     </section>
   )
 }
 
-function Header() {
+function Header({nestName}) {
   return (
-    <div className="p-6">
-      <div className="flex flex-col justify-center gap-4">
-        <a href="/" className="flex items-center gap-4">
-          <BackIcon className="text-4xl text-white/50 ring ring-white/50 rounded-lg p-1"/>
-          <div className="flex flex-col text-white">
-            <p><span className="font-bold">Welcome</span> to NestHome</p>
-            <p className="text-sm font-thin">Made by Maiky</p>
-          </div>
-        </a>
+  <div className="p-6">
+    <div className="flex justify-between items-center gap-4">
+      <div onClick={() => window.location.href="/"} className="rounded-full p-2 aspect-square bg-stone-200">
+        <BackArrow className="text-3xl"/>
+      </div>
+      <p className="font-semibold text-xl text-stone-900">{nestName}</p>
+      <div className="rounded-full p-2 aspect-square bg-stone-200">
+        <VerticalDots className="text-3xl"/>
       </div>
     </div>
+  </div>
   )
 }
 
-function WrapToNest({nestId}) {
-  const {data, error, isLoading} = useSWR(`/api/v1/nests/get?nest=${nestId}`, fetcher)
-  if (error) return <ErrorBox>{JSON.stringify(error)}</ErrorBox>;
-  if (isLoading) return <LoadingBox/>;
-  if (data === undefined) return <ErrorBox>Nest was not loaded</ErrorBox>;
-  if (data.error !== undefined) return <ErrorBox>{data.error}</ErrorBox>;
+function WrapToNest({data}) {
   switch (data.meta.ui_type.toUpperCase()) {
     case "BASIC_NEST":
       return <BasicNest nest={data}/>
@@ -53,19 +51,9 @@ function WrapToNest({nestId}) {
 
 function NoNestByType({type}) {
   return (
-    <div className="bg-white pt-2 rounded-t-2xl flex flex-col flex-grow">
+    <div className="bg-white rounded-t-2xl flex flex-col flex-grow">
       <div className="flex justify-center w-full p-2">
         <p>No nest by this type {type}</p>
-      </div>
-    </div>
-  )
-}
-
-function LoadingNest() {
-  return (
-    <div className="bg-white pt-2 rounded-t-2xl flex flex-col flex-grow">
-      <div className="flex justify-center w-full p-2">
-        <AnimatedLoadingIcon className="text-5xl animate-pulse"/>
       </div>
     </div>
   )
