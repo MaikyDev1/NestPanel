@@ -47,7 +47,7 @@ export function StateDevice({deviceID, title, color, icon, getState, enableState
   //   </div>
   // )
   return (
-    <div className={`aspect-square ${data.state === 1 ? "bg-stone-800" : "bg-zinc-200"} rounded-[2rem] p-5 flex flex-col justify-between shadow-lg`}>
+    <div className={`aspect-square ${data.state === 1 ? "bg-stone-800" : "bg-stone-200"} rounded-[2rem] p-5 flex flex-col justify-between shadow-lg`}>
       <div className="flex items-center justify-between">
         <Icon className={`text-5xl bg-white p-2 text-stone-800 rounded-full`} icon={icon}/>
         <SimpleVerticalSwitch onChange={() => turn((data.state === 1 ? disableState : enableState))} defaultChecked={data.state === 1} id={deviceID} color={color}/>
