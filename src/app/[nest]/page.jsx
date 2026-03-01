@@ -7,6 +7,7 @@ import {AnimatedLoadingIcon, BackIcon, TemperatureIcon} from "@/app/components/B
 import BasicNest from "@/app/[nest]/nests/BasicNest";
 import HeatingNest from "@/app/[nest]/nests/HeatingNest";
 import {BackArrow, VerticalDots} from "@/app/FlareUI/FlareIcons";
+import Link from "next/dist/client/link";
 
 const fetcher = url => fetch(url).then(r => r.json())
 
@@ -26,9 +27,9 @@ function Header({nestName}) {
   return (
   <div className="p-6">
     <div className="flex justify-between items-center gap-4">
-      <div onClick={() => window.location.href="/"} className="rounded-full p-2 aspect-square bg-stone-200">
+      <Link href="/" className="rounded-full p-2 aspect-square bg-stone-200">
         <BackArrow className="text-3xl"/>
-      </div>
+      </Link>
       <p className="font-semibold text-xl text-stone-900">{nestName}</p>
       <div className="rounded-full p-2 aspect-square bg-stone-200">
         <VerticalDots className="text-3xl"/>

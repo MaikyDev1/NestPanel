@@ -23,28 +23,25 @@ import Link from "next/dist/client/link";
 export default function Home() {
   const [display, setDisplay] = useState("devices");
   return (
-    <section className="select-none md:w-1/4 flex flex-col w-full h-full bg-white">
+    <section className="select-none md:w-1/4 p-4 flex flex-col gap-1 w-full h-full bg-white">
       {/* Scenes */}
-      <div className="grid grid-cols-2 p-2">
-        <section className="p-2">
-          <p className="text-xl">Buna, Pam</p>
-        </section>
+      <div className="grid grid-cols-2">
         <Header/>
       </div>
-      <div className="grid grid-cols-2 my-1 mx-2 bg-gray-200 gap-1 p-1 col-span-2 rounded-xl">
-        <div onClick={() => setDisplay("devices")} className={`rounded-lg p-1 text-center ${display === "devices" ? "bg-stone-800 grow text-white" : "bg-white grow text-black"}`}>
+      <div className="grid grid-cols-2 bg-stone-200 gap-2 p-1 col-span-2 rounded-xl">
+        <div onClick={() => setDisplay("devices")} className={`rounded-lg p-2 text-center ${display === "devices" ? "bg-stone-800 grow text-white" : "bg-white grow text-black"}`}>
           Nests
         </div>
-        <div onClick={() => setDisplay("nests")} className={`rounded-lg p-1 text-center ${display === "nests" ? "bg-stone-800 grow text-white" : "bg-white grow text-black"}`}>
+        <div onClick={() => setDisplay("nests")} className={`rounded-lg p-2 text-center ${display === "nests" ? "bg-stone-800 grow text-white" : "bg-white grow text-black"}`}>
           Scenes
         </div>
       </div>
       <section className="flex-1 overflow-hidden">
         {display === "devices" ?
-          <div className="grid grid-cols-2 p-2 gap-1 overflow-y-auto">
+          <div className="grid grid-cols-2 gap-2 overflow-y-auto">
             <Nests/>
           </div> :
-          <div className="grid grid-cols-2 p-2 gap-1 overflow-y-auto">
+          <div className="grid grid-cols-2 gap-2 overflow-y-auto">
             <Scenes/>
           </div>
         }
@@ -63,13 +60,13 @@ const fetcher = url => fetch(url).then(r => r.json())
 
 function Header() {
   return (
-    <div className="bg-stone-800 col-span-2 rounded-2xl p-3">
+    <div className="bg-stone-800 col-span-2 rounded-2xl p-4">
       <div className="text-white text-3xl font-bold flex justify-between">
         <div>
-          <p>-42ºC</p>
+          <p>2ºC</p>
           <p className="text-lg font-mono">Good</p>
         </div>
-        <IconByTemperature temperature={10} className="relative -translate-x-1 -translate-y-1 text-5xl"/>
+        <IconByTemperature temperature={2} className="relative -translate-x-1 -translate-y-1 text-5xl"/>
       </div>
       <p className="text-stone-400 text-sm">Outside humidity 54%</p>
       <div className="flex text-sm mt-2 justify-between">
@@ -188,13 +185,13 @@ export function StateSceneBoxUI({currentState, title, description, icon, sceneId
 
 export function NestBoxUI({meta, devices_count, nestId}) {
   return (
-    <Link href={`/${nestId}`} className="aspect-square bg-zinc-200 rounded-[2rem] p-5 flex flex-col justify-between shadow-lg">
+    <Link href={`/${nestId}`} className="aspect-square bg-zinc-200 rounded-[2rem] p-5 flex flex-col justify-between shadow-md">
       <div className="flex items-center justify-between">
         <Icon className={`text-5xl bg-white p-2 text-stone-800 rounded-full`} icon={meta.icon}/>
       </div>
       <div>
         <p>{meta.title}</p>
-        <p className="font-thin text-xs">{devices_count === undefined ? "Stanalone" : devices_count + " devices"}</p>
+        <p className="font-thin text-xs">{devices_count === undefined ? "Standalone" : devices_count + " devices"}</p>
       </div>
     </Link>
   )

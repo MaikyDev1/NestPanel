@@ -135,13 +135,13 @@ function WorkUntil({time, mutate, nest}) {
     <section>
       <TwoHourClock initialDurationMs={time}/>
       {time !== 0 ?
-        <div className="grid grid-cols-2 mt-2 bg-stone-200 gap-1 p-1.5 col-span-2 rounded-xl">
+        <div className="grid grid-cols-2 mt-2 bg-stone-200 gap-2 p-1.5 col-span-2 rounded-xl">
           <div onClick={() => {fetcher(`/api/v1/devices/run?device=${nest.remove_time.device}&action=${nest.remove_time.action}&params={"time":30}`).then(r => mutate());}}
-               className={`cursor-pointer rounded-lg p-2 text-center bg-white grow text-black`}>
+               className={`cursor-pointer rounded-lg p-3 text-center bg-white grow text-black`}>
             - 30 minute
           </div>
           <div onClick={() => {fetcher(`/api/v1/devices/run?device=${nest.add_time.device}&action=${nest.add_time.action}&params={"time":30}`).then(r => mutate());}}
-               className={`cursor-pointer rounded-lg p-2 text-center bg-stone-800 grow text-white`}>
+               className={`cursor-pointer rounded-lg p-3 text-center bg-stone-800 grow text-white`}>
             + 30 minute
           </div>
         </div> : null
