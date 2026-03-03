@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+<h1 align="center" id="title">NestPanel</h1>
 
-## Getting Started
+<p id="description">A mobile Progresive Web Application used to control smart IoT devices. NestPanel is the frontend of NestServer.</p>
 
-First, run the development server:
+<h2>🖼️ Images </h2>
 
+<h2>🗞 How to start</h2>
+
+<h4>1. Install and configure <b>NestServer</b></h4>
+You Must install NestServer Backend for the Front-End to work. 
+
+<a href="https://github.com/MaikyDev1/NestServer">Read more here</a>
+
+<h4>2. Download the last stable or development build NestPanel</h4>
+
+We start by getting all the files from github and unzipping them into `/var/www/nest_panel`
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+mkdir /var/www/nest_panel
+cd /var/www/nest_panel
+curl -Lo nest_panel.tar.gz https://github.com/MaikyDev1/NestPanel/releases/latest/download/nest_panel.tar.gz
+tar -xzvf nest_panel.tar.gz
 ```
+Create a `.env` configuration file and use this example to start
+```env
+NEST_SERVER=http://[server-ip]
+```
+Build the NextJs application
+```bash
+npm build
+```
+<h4>3. Create the Service Worker and start the application</h4>
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Create a file called `nestpanel.service` in `/etc/systemd/system` with the contents below.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+```service
+[Unit]
+Description=NestPanel
+After=network.target
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+[Service]
+User=root
+WorkingDirectory=/home/ubuntu/nest_panel
+ExecStart=/home/ubuntu/nest_panel/start.sh
+Restart=always
+RestartSec=5
+Environment=NODE_ENV=production
+StandardOutput=journal
+StandardError=journal
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+[Install]
+WantedBy=multi-user.target
+```
+After you added that service we will have to enable and start the service.
+```bash
+# enable
+sudo systemctl enable --now nestpanel
+# start
+sudo systemctl start --now nestpanel
+# see logs
+sudo journalctl -u nestpanel -f
+```
