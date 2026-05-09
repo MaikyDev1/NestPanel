@@ -39,6 +39,56 @@ export function InputTypeBox({id, title, name, placeholder, defaultText, error})
   )
 }
 
+export function SelectAndInput({defaultSelection = "", id, title, placeholder, options = []}) {
+
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(defaultSelection);
+
+  return (
+    <div className="relative w-full mb-2">
+      <label className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" htmlFor={id}>
+        {title}
+      </label>
+
+      <input
+        id={id}
+        type="text"
+        placeholder={placeholder}
+        value={value}
+        onBlur={() => setOpen(false)}
+        onChange={(e) => {
+          setValue(e.target.value);
+          setOpen(true);
+        }}
+        onFocus={() => setOpen(true)}
+        className="w-full focus:ring-2 focus:ring-amber-400 appearance-none outline-none bg-neutral-100 rounded py-2 px-3"
+      />
+
+      {open && (
+        <div className="absolute w-full mt-1 min-h-1 border rounded bg-white shadow z-10">
+          {options
+            .filter((o) =>
+              o.toLowerCase().includes(value.toLowerCase())
+            )
+            .map((option) => (
+              <div
+                key={option}
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  setValue(option);
+                  setOpen(false);
+                }}
+                className="px-3 py-2 cursor-pointer hover:bg-gray-100">
+                {option}
+              </div>
+            ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+
 export function SelectTypeBox ({id, title, defaultValue, children, onChange}) {
   return (
     <div className="w-full">

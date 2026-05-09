@@ -25,6 +25,19 @@ export function GrayButton ({ title, ...restProps }) {
   )
 }
 
+export function SimpleVerticalSwitch({id, defaultChecked, onChange}) {
+  return (
+    <label htmlFor={id} className="flex -rotate-90 items-center cursor-pointer select-none text-neutral-900">
+      <div className="relative">
+        <input type="checkbox" onChange={onChange} id={id} defaultChecked={defaultChecked} className="peer sr-only"/>
+        <div className="block h-8 rounded-full bg-white w-14"></div>
+        <div
+          className="absolute w-6 h-6 transition bg-stone-800 rounded-full dot left-1 top-1 peer-checked:translate-x-full peer-checked:bg-rose-400">
+        </div>
+      </div>
+    </label>
+  )
+}
 
 export function SimpleSwitch({color, id, defaultChecked, onChange}) {
   return (

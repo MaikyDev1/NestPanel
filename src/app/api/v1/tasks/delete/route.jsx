@@ -6,14 +6,15 @@ export async function GET(request) {
   const searchParams = request.nextUrl.searchParams
   const group = searchParams.get('group');
   const task = searchParams.get('task');
-  if (group === null || group === undefined || group === "all" ||
-    task === null || task === undefined || task === "all") {
-    return NextResponse.json({error: "No task and group"});
+  const options = {method: 'POST'};
+  let response = null;
+  if (task === null && group !== null) {
+    response = await fetch(`${process.env.NESTSERVER}/api/v1/tasks/delete/${group}`, options);
+  } else if(task !== null && group !== null) {
+    response = await fetch(`${process.env.NESTSERVER}/api/v1/tasks/delete/${group}/${task}`, options);
   }
-  const value = await sendHttpRequest(`${process.env.NESTSERVER}/api/v1/tasks/delete/${group}/${task}`);
-  return NextResponse.json(value);
-}
-
-async function sendHttpRequest(part) {
-  return await fetch(part).then(res => res.json()).catch((e) => console.log(e))
+  if (response === null)
+    return NextResponse.json({error: "Bad request"})
+  const data = await response.json();
+  return NextResponse.json(data);
 }

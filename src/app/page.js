@@ -7,98 +7,81 @@ import {
 } from "@/app/components/BaseUI";
 import {Icon} from "@iconify/react";
 import {ControlMouseIcon, FeatherIcon, LightingIcon, TemperatureIcon} from "@/app/components/BaseIcons";
-import {useState} from "react";
+import React, {useState} from "react";
+import {
+  AccountIcon,
+  CogIcon,
+  HomeNavigationIcon,
+  IconByTemperature,
+  TimeNavigationIcon
+} from "@/app/FlareUI/FlareIcons";
+import {MobileNavigation, MobileNavigationElement} from "@/app/FlareUI/Mobile/NavigationBars";
+import {DraggableDialogBox} from "@/app/FlareUI/Mobile/DialogBoxes";
+import {BlackButton, GrayButton} from "@/app/FlareUI/Basic/Buttons";
+import Link from "next/dist/client/link";
 
 export default function Home() {
-    return (
-      <section className="select-none h-full md:w-1/4 w-full bg-indigo-700 flex flex-col">
+  const [display, setDisplay] = useState("devices");
+  return (
+    <section className="select-none md:w-1/4 p-4 flex flex-col gap-1 w-full h-full bg-white">
+      {/* Scenes */}
+      <div className="grid grid-cols-2">
         <Header/>
-        {/* Scenes */}
-        <div className="bg-white pt-2 rounded-t-2xl flex flex-col flex-grow">
-          <div className="flex flex-col  w-full p-2">
-            <h1 className="text-neutral-900 font-thin ml-2">Scenes</h1>
-            <div className="grid grid-cols-2 gap-3">
-              <Scenes/>
-            </div>
-          </div>
-          {/* Devices */}
-          <div className="flex flex-col justify-center w-full p-2">
-            <h1 className="text-neutral-900 font-thin ml-2">Nests</h1>
-            <div className="grid grid-cols-2 gap-3 mt-3">
-              <Nests/>
-            </div>
-          </div>
+      </div>
+      <div className="grid grid-cols-2 bg-stone-200 gap-2 p-1 col-span-2 rounded-xl">
+        <div onClick={() => setDisplay("devices")} className={`rounded-lg p-2 text-center ${display === "devices" ? "bg-stone-800 grow text-white" : "bg-white grow text-black"}`}>
+          Nests
         </div>
-        <nav className="">
-          <div className="">
-
+        <div onClick={() => setDisplay("nests")} className={`rounded-lg p-2 text-center ${display === "nests" ? "bg-stone-800 grow text-white" : "bg-white grow text-black"}`}>
+          Scenes
+        </div>
+      </div>
+      <section className="flex-1 overflow-hidden">
+        {display === "devices" ?
+          <div className="grid grid-cols-2 gap-2 overflow-y-auto">
+            <Nests/>
+          </div> :
+          <div className="grid grid-cols-2 gap-2 overflow-y-auto">
+            <Scenes/>
           </div>
-        </nav>
+        }
       </section>
-    );
+      <MobileNavigation defaultActive={0}>
+        <MobileNavigationElement icon={<HomeNavigationIcon/>} index={0}/>
+        <MobileNavigationElement href="/tasks" icon={<TimeNavigationIcon/>} index={1}/>
+        <MobileNavigationElement icon={<CogIcon/>} index={2}/>
+        <MobileNavigationElement icon={<AccountIcon/>} index={3}/>
+      </MobileNavigation>
+    </section>
+  );
 }
 
 const fetcher = url => fetch(url).then(r => r.json())
 
 function Header() {
-  const [popup, setPopup] = useState(false);
   return (
-    <div className="p-6">
-      {!popup ? null :
-        <div className="absolute select none left-0 z-50 flex flex-col w-full items-center bg-white/10 backdrop-blur top-0 h-full">
-          <nav className="mt-6 flex flex-col justify-center md:w-[23%] w-full gap-2 items-center bg-gray-700/90 backdrop-blur-sm rounded-2xl p-3">
-            <a href="/tasks" className="cursor-pointer flex w-2/3 p-2 justify-center items-center gap-3">
-              <LightingIcon className="text-yellow-400 text-4xl"/>
-              <p className="font-mono text-white font-bold">Tasks</p>
-            </a>
-            <div className="cursor-pointer flex w-2/3 border-t-neutral-500 border-t p-3 justify-center items-center gap-3">
-              <ControlMouseIcon className="text-red-300 text-4xl"/>
-              <p className="font-mono text-white font-bold">Devices</p>
-            </div>
-            <div className="cursor-pointer flex w-2/3 border-t-neutral-500 border-t p-3 justify-center items-center gap-3">
-              <FeatherIcon className="text-blue-300 text-4xl"/>
-              <p className="font-mono text-white font-bold">Nests</p>
-            </div>
-            <div onClick={() => setPopup(false)} className="cursor-pointer flex w-2/3 justify-center items-center bg-indigo-700 p-2 rounded-2xl gap-3">
-              <p className="font-mono text-white font-bold">Exit</p>
-            </div>
-          </nav>
+    <div className="bg-stone-800 col-span-2 rounded-2xl p-4">
+      <div className="text-white text-3xl font-bold flex justify-between">
+        <div>
+          <p>2ºC</p>
+          <p className="text-lg font-mono">Good</p>
         </div>
-      }
-      <div className="flex flex-col justify-center gap-4">
-        <div className="flex items-center gap-4">
-          <Icon icon="duo-icons:dashboard" className="text-4xl text-white/50 ring ring-white/50 rounded-lg p-1" onClick={() => setPopup(true)}/>
-          <div className="flex flex-col text-white">
-            <p><span className="font-bold">Welcome</span> to NestHome</p>
-            <p className="text-sm font-thin">Made by Maiky</p>
-          </div>
+        <IconByTemperature temperature={2} className="relative -translate-x-1 -translate-y-1 text-5xl"/>
+      </div>
+      <p className="text-stone-400 text-sm">Outside humidity 54%</p>
+      <div className="flex text-sm mt-2 justify-between">
+        <div className="text-white">
+          <p className="font-bold text-white">Indoor temp</p>
+          <p className="text-stone-400">22ºC</p>
         </div>
-      {/* Examples */}
-        <nav className="flex justify-between px-4">
-          {/* Temperature */}
-          <div className="flex items-center flex-col">
-            <div className="flex items-center text-2xl text-white">
-              <p className="font-bold font-mono">0</p>
-              <TemperatureIcon className="text-3xl"/>
-            </div>
-            <p className="text-white font-normal text-sm">Bedroom temp</p>
-          </div>
-          {/* Some state */}
-          <div className="flex items-center flex-col">
-            <div className="flex items-center text-2xl text-white">
-              <p className="font-bold font-mono">0</p>
-              <TemperatureIcon className="text-3xl"/>
-            </div>
-            <p className="text-white font-normal text-sm">Outside temp</p>
-          </div>
-          {/* Current consumtion */}
-          <div className="flex items-center flex-col">
-            <div className="flex items-center text-2xl text-white">
-              <p className="font-bold font-mono">0.0KW</p>
-            </div>
-            <p className="text-white font-normal text-sm">Home consumtion</p>
-          </div>
-        </nav>
+        <div className="text-white">
+          <p className="font-bold text-white">Humidity</p>
+          <p className="text-stone-400">67%</p>
+        </div>
+        <div className="text-white">
+          <p className="font-bold text-white">Air Quality</p>
+          <p className="text-stone-400">NaN</p>
+        </div>
       </div>
     </div>
   )
@@ -124,6 +107,7 @@ function Nests() {
   if (error) return <ErrorBox>{JSON.stringify(error)}</ErrorBox>;
   if (isLoading) return <LoadingContent/>;
   if (data === undefined) return <ErrorBox>Data is undifiend</ErrorBox>;
+  if (data === {}) return <p>No data was forwarded!</p>
   let html = [];
   data.forEach(part => {
     html.push(
@@ -134,14 +118,22 @@ function Nests() {
 }
 
 export function StatelessSceneBoxUI({title, description, icon, sceneId}) {
-  const [popup, setPopup] = useState(false);
+  const [popup, setPopup] = useState("-");
   async function turn() {
     const resp = await fetcher(`/api/v1/scenes/turn?scene=${sceneId}`)
-    setPopup(true);
+    setPopup(resp);
   }
   return (
     <div>
-      <PopUp icon="line-md:confirm-circle" setPopup={setPopup} popup={popup} title={`${title} was runned`}/>
+      {popup !== "-" ?
+        <DraggableDialogBox onClose={() => setPopup("-")}>
+          <h1 className="font-bold text-neutral-900 text-2xl">Scene activated!</h1>
+          <p className="text-neutral-900 text-md">The scene {title} was executed! </p>
+          <div className="pt-6 w-2/3 flex flex-col">
+            <GrayButton onClick={() => setPopup("-")} title="Close"/>
+          </div>
+        </DraggableDialogBox> : null
+      }
       <div onClick={turn} className="group cursor-pointer select-none hover:bg-amber-400/30 bg-neutral-400/10 text-neutral-800 flex flex-col justify-center h-20 w-full p-4 rounded-2xl">
         <div id={sceneId} className="flex rounded-2xl items-center">
           <div className=" flex p-1 items-center justify-center flex-col">
@@ -158,16 +150,24 @@ export function StatelessSceneBoxUI({title, description, icon, sceneId}) {
 }
 
 export function StateSceneBoxUI({currentState, title, description, icon, sceneId}) {
-  const [popup, setPopup] = useState(false);
+  const [popup, setPopup] = useState("-");
   const [state, setState] = useState(currentState);
   async function turn() {
     const resp = await fetcher(`/api/v1/scenes/turn?scene=${sceneId}`)
     setState(Boolean(resp.state));
-    setPopup(true);
+    setPopup(resp);
   }
   return (
     <div>
-      <PopUp icon="line-md:confirm-circle" setPopup={setPopup} popup={popup} title={`${title} was runned`}/>
+      {popup !== "-" ?
+        <DraggableDialogBox onClose={() => setPopup("-")}>
+          <h1 className="font-bold text-neutral-900 text-2xl">Scene {Boolean(popup.state) === true ? "Activated" : "Disabled"}!</h1>
+          <p className="text-neutral-900 text-md">The scene {title} was executed!</p>
+          <div className="pt-6 w-2/3 flex flex-col">
+            <GrayButton onClick={() => setPopup("-")} title="Close"/>
+          </div>
+        </DraggableDialogBox> : null
+      }
       <div onClick={turn} className={`group cursor-pointer select-none hover:bg-amber-400/30 ${state ? "bg-amber-400/40" : "bg-neutral-400/10"} text-neutral-800 flex flex-col justify-center h-20 w-full p-4 rounded-2xl`}>
         <div id={sceneId} className="flex rounded-2xl items-center">
           <div className=" flex p-1 items-center justify-center flex-col">
@@ -185,16 +185,14 @@ export function StateSceneBoxUI({currentState, title, description, icon, sceneId
 
 export function NestBoxUI({meta, devices_count, nestId}) {
   return (
-    <a href={`/${nestId}`} className={`group cursor-pointer select-none hover:bg-amber-400/30text-neutral-800 flex justify-center aspect-square w-full p-4 rounded-2xl`} style={{background: `${meta.color}20`}}>
-      <div id={nestId} className="flex rounded-2xl gap-5 flex-col justify-center items-center">
-        <div className="flex items-center justify-center flex-col rounded-full p-3" style={{background: `${meta.color}50`}}>
-          <Icon className={`text-4xl`} style={{color: meta.color}} icon={meta.icon}/>
-        </div>
-        <div className="flex flex-col justify-center items-center">
-          <p className="font-semibold text-sm">{meta.title}</p>
-          <p className="font-thin text-xs">{devices_count === undefined ? "" : devices_count + " devices"}</p>
-        </div>
+    <Link href={`/${nestId}`} className="aspect-square bg-zinc-200 rounded-[2rem] p-5 flex flex-col justify-between shadow-md">
+      <div className="flex items-center justify-between">
+        <Icon className={`text-5xl bg-white p-2 text-stone-800 rounded-full`} icon={meta.icon}/>
       </div>
-    </a>
+      <div>
+        <p>{meta.title}</p>
+        <p className="font-thin text-xs">{devices_count === undefined ? "Standalone" : devices_count + " devices"}</p>
+      </div>
+    </Link>
   )
 }
