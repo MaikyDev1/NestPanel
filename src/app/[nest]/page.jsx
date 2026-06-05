@@ -3,11 +3,11 @@
 import useSWR from "swr";
 import React from "react";
 import {ErrorBox, LoadingBox, LoadingContent} from "@/app/components/BaseUI";
-import {AnimatedLoadingIcon, BackIcon, TemperatureIcon} from "@/app/components/BaseIcons";
 import BasicNest from "@/app/[nest]/nests/BasicNest";
 import HeatingNest from "@/app/[nest]/nests/HeatingNest";
 import {BackArrow, VerticalDots} from "@/app/FlareUI/FlareIcons";
 import Link from "next/dist/client/link";
+import RemoteNest from "@/app/[nest]/nests/RemoteNest";
 
 const fetcher = url => fetch(url).then(r => r.json())
 
@@ -45,6 +45,8 @@ function WrapToNest({data}) {
       return <BasicNest nest={data}/>
     case "THERMOSTAT_NEST":
       return <HeatingNest nest={data}/>
+    case "REMOTE_NEST":
+      return <RemoteNest nest={data}/>
     default:
       return <NoNestByType type={data.meta.ui_type}/>
   }

@@ -33,6 +33,20 @@ export function PlusIcon(props) {
   return (<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 448 512" {...props}><path fill="currentColor" d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32"></path></svg>);
 }
 
+export function MinusIcon(props) {
+  return (<svg xmlns="http://www.w3.org/2000/svg" {...props} width="1em" height="1em" viewBox="0 0 24 24">
+    <path d="M0 0h24v24H0z" fill="none" />
+    <path fill="currentColor" d="M18 11H6a2 2 0 0 0 0 4h12a2 2 0 0 0 0-4" />
+  </svg>)
+}
+
+export function PowerIcon(props) {
+  return (<svg xmlns="http://www.w3.org/2000/svg" {...props} width="1em" height="1em" viewBox="-3 -2.5 24 24">
+    <path d="M-3 -2.5h24v24H-3z" fill="none" />
+    <path fill="currentColor" d="M12 4.1a.97.97 0 0 1-.617-.898c0-.536.448-.972 1-.972q.175.001.332.055q.001-.005.004-.003C15.834 3.658 18 6.708 18 10.252C18 15.082 13.97 19 9 19s-9-3.917-9-8.749C0 6.732 2.137 3.7 5.218 2.31a1 1 0 0 1 .392-.076c.552 0 1 .435 1 .971a.97.97 0 0 1-.61.896c-2.365 1.092-4 3.436-4 6.15c0 3.758 3.134 6.805 7 6.805s7-3.047 7-6.805c0-2.714-1.635-5.058-4-6.15zM9 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0V1a1 1 0 0 1 1-1" />
+  </svg>)
+}
+
 export function EditIcon(props) {
   return (<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 1024 1024" {...props}><path fill="currentColor" fillOpacity={0.15} d="M761.1 288.3L687.8 215L325.1 577.6l-15.6 89l88.9-15.7z"></path><path fill="currentColor" d="M880 836H144c-17.7 0-32 14.3-32 32v36c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-36c0-17.7-14.3-32-32-32m-622.3-84c2 0 4-.2 6-.5L431.9 722c2-.4 3.9-1.3 5.3-2.8l423.9-423.9a9.96 9.96 0 0 0 0-14.1L694.9 114.9c-1.9-1.9-4.4-2.9-7.1-2.9s-5.2 1-7.1 2.9L256.8 538.8c-1.5 1.5-2.4 3.3-2.8 5.3l-29.5 168.2a33.5 33.5 0 0 0 9.4 29.8c6.6 6.4 14.9 9.9 23.8 9.9m67.4-174.4L687.8 215l73.3 73.3l-362.7 362.6l-88.9 15.7z"></path></svg>);
 }

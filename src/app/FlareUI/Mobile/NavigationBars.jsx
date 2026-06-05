@@ -1,4 +1,3 @@
-import {HomeNavigationIcon} from "@/app/FlareUI/FlareIcons";
 import {createContext, useContext, useMemo, useState} from "react";
 import React from 'react';
 import Link from "next/dist/client/link";
