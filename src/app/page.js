@@ -110,9 +110,10 @@ function Nests() {
   if (data === {}) return <p>No data was forwarded!</p>
   let html = [];
   data.forEach(part => {
-    html.push(
-      <NestBoxUI key={part.id} meta={part.meta} devices_count={part.devices_count} nestId={part.id}/>
-    )
+    if (!part.meta.hide_from_main)
+      html.push(
+        <NestBoxUI key={part.id} meta={part.meta} devices_count={part.devices_count} nestId={part.id}/>
+      )
   })
   return html;
 }

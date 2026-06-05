@@ -13,7 +13,7 @@ export default function HeatingNest({nest}) {
   if (error) return <ErrorBox>{JSON.stringify(error)}</ErrorBox>;
   if (isLoading) return <LoadingBox/>
   if (data === undefined) return <ErrorBox></ErrorBox>;
-  const time = data[nest.get_time.read_parameter];
+  const time = data[nest.get_time.read_parameter] * 1000;
   return (
     <div className="bg-white rounded-t-2xl px-4 flex flex-col flex-grow">
       <div className="flex flex-col w-full">
