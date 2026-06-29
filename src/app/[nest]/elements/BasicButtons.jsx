@@ -3,7 +3,7 @@ import {ErrorBox} from "@/app/components/BaseUI";
 import {Icon} from "@iconify/react";
 import {SimpleSwitch, SimpleVerticalSwitch} from "@/app/components/Buttons";
 import Link from "next/dist/client/link";
-import React from "react";
+import React, {useState} from "react";
 
 const fetcher = url => fetch(url).then(r => r.json())
 
@@ -13,6 +13,8 @@ const fetcher = url => fetch(url).then(r => r.json())
  */
 export function WrapToButton({data}) {
   switch (data.meta.type) {
+    case "stateless":
+      return <Stateless key={data.id} title={data.meta.title} color={data.meta.color} icon={data.meta.icon} deviceID={data.id} enableState={data.enable_actions}/>;
     case "state":
       return <StateDevice key={data.id} title={data.meta.title} color={data.meta.color} icon={data.meta.icon} deviceID={data.id}
                           getState={data.get_state} enableState={data.enable_actions} disableState={data.disable_actions}/>
@@ -34,18 +36,6 @@ export function StateDevice({deviceID, title, color, icon, getState, enableState
     await mutate();
   }
 
-  // return (
-  //   <div className="w-full h-[150px] flex flex-col justify-between rounded-2xl p-5" style={{background: `${color}30`}}>
-  //     <div className="flex justify-between">
-  //       <Icon icon={icon} className="text-5xl" style={{color: `${color}`}}/>
-  //       <SimpleSwitch onChange={() => turn((data.state === 1 ? disableState : enableState))} defaultChecked={data.state === 1} id={deviceID} color={color}/>
-  //     </div>
-  //     <div className="">
-  //       <h1 className="text-md font-mono" style={{color: `${color}`}}>{title}</h1>
-  //       <p className="text-sm font-mono" style={{color: `${color}80`}}>{data.state === 1 ? "On" : "Off"}</p>
-  //     </div>
-  //   </div>
-  // )
   return (
     <div className={`aspect-square ${data.state === 1 ? "bg-stone-800" : "bg-stone-200"} rounded-[2rem] p-5 flex flex-col justify-between shadow-lg`}>
       <div className="flex items-center justify-between">
@@ -55,6 +45,28 @@ export function StateDevice({deviceID, title, color, icon, getState, enableState
       <div>
         <p className={`${data.state !== 1 ? "text-stone-800" : "text-white"} font-semibold`}>{title}</p>
         <p className={`font-thin ${data.state !== 1 ? "text-stone-800" : "text-white"} text-xs`}>{data.state === 1 ? "On" : "Off"}</p>
+      </div>
+    </div>
+  )
+}
+
+export function Stateless({deviceID, title, color, icon, enableState}) {
+  const [debouncer, setDebouncer] = useState(false);
+  async function turn() {
+    if (debouncer) return;
+    setDebouncer(true);
+    setTimeout(() => setDebouncer(false), 1000);
+    await fetcher(`/api/v1/devices/run?device=${deviceID}&action=${enableState}`);
+  }
+
+  return (
+    <div onClick={() => turn()} className={`aspect-square transition duration-300 ${debouncer ? "bg-stone-800" : "bg-stone-200"} rounded-[2rem] p-5 flex flex-col justify-between shadow-lg`}>
+      <div className="flex items-center justify-between">
+        <Icon className={`text-5xl bg-white p-2 text-stone-800 rounded-full`} icon={icon}/>
+      </div>
+      <div>
+        <p className={`transition duration-300 ${!debouncer ? "text-stone-800" : "text-white"} font-semibold`}>{title}</p>
+        <p className={`transition duration-300 font-thin ${!debouncer ? "text-stone-800" : "text-white"} text-xs`}>Click to activate</p>
       </div>
     </div>
   )
