@@ -56,7 +56,7 @@ export function Stateless({deviceID, title, color, icon, enableState}) {
     if (debouncer) return;
     setDebouncer(true);
     setTimeout(() => setDebouncer(false), 1000);
-    await fetcher(`/api/v1/devices/run?device=${deviceID}&action=${enableState}`);
+    await fetcher(`/api/v1/devices/run?device=${deviceID}&action=${enableState.action}`);
   }
 
   return (
